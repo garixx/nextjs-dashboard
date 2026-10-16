@@ -30,18 +30,24 @@ export async function createInvoice(formData: FormData) {
   // Test it out:
   console.log(customerId, amount, status,amountInCents,date);
 
-  try {
-    await sql`
+  await sql`
       INSERT INTO invoices (customer_id, amount, status, date)
       VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
     `;
-  } catch (error) {
-    // We'll also log the error to the console for now
-    console.error(error);
-    return {
-      message: 'Database Error: Failed to Create Invoice.',
-    };
-  }
+  //return in catch block causes create-form.tsx <form action={createInvoice}> block fail compile
+  // TODO: implement correct handling after course finish. Out of scope for now.
+  // try {
+  //   await sql`
+  //     INSERT INTO invoices (customer_id, amount, status, date)
+  //     VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
+  //   `;
+  // } catch (error) {
+  //   // We'll also log the error to the console for now
+  //   console.error(error);
+  //   return {
+  //     message: 'Database Error: Failed to Create Invoice.',
+  //   };
+  // }
 
   revalidatePath('/dashboard/invoices');
   redirect('/dashboard/invoices');
